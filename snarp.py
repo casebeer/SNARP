@@ -547,6 +547,8 @@ def main(*argv):
     else:
         delta_limits = SILENCE_PRESET_LIMITS['quiet']
 
+    delta_limits = list(delta_limits) # make mutable
+
     if args.silence_peak_limit:
         delta_limits[0] = args.silence_peak_limit
     if args.silence_iqr_limit:
