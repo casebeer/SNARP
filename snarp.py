@@ -122,12 +122,28 @@ class NoiseFilter(object):
         pass
 
 class RingBuffer(collections.deque):
+    '''
+    Wrapper around collections.deque to retrieve items evicted due to maxlen
+    '''
+    def __init__(self, *args, **kwargs):
+        # add maxlen behavior for Python < 2.7
+        if 'maxlen' in kwargs:
+            self._maxlen = kwargs['maxlen']
+        else:
+            raise Exception("You must specify a maxlen for this RingBuffer")
+        collections.deque.__init__(self, *args, **kwargs)
     def append(self, value):
         discard = None
-        if len(self) == self.maxlen:
+        if len(self) == self._maxlen:
             discard = self.popleft()
         collections.deque.append(self, value)
         return discard
+    def appendLeft(self, *args, **kwargs):
+        raise NotImplementedError()
+    def extend(self, *args, **kwargs):
+        raise NotImplementedError()
+    def extendLeft(self, *args, **kwargs):
+        raise NotImplementedError()
 
 def dbfs_to_sample_delta(dbfs, sample_width):
     # convert dBFS to sample range based on our sample width in bytes
