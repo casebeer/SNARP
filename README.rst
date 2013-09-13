@@ -30,9 +30,16 @@ flag::
 
     $ python snarp.py -i test.wav output.wav
 
-You may need to override the min and max sample levels used to define silent periods::
+You may need to override the levels used to define silent periods. These are specified
+as decibels below a full scale (i.e. almost clipping) waveform, or dBFS. Since they 
+are a fraction of the full scale, they'll always be negative. You can specify both
+the peak-to-peak range and the range of the 50th percentile of samples::
 
-    $ python snarp.py -i test.wav --silence-min -100 --silence-max 100 output.wav
+    $ # extremely sensitive to noise - picks up whispers
+    $ python snarp.py -i test.wav --silence-peak-limit -27 --silence-iqr-limit -36 output.wav
+    ...
+    $ # much less sensitive, ignores whispers and quiet speech
+    $ python snarp.py -i test.wav --silence-peak-limit -15 --silence-iqr-limit -24 output.wav
 
 Other options and usage information can be found with ``python snarp.py -h``.
 
@@ -42,12 +49,12 @@ Original SNARP behavior
 Use arecord via pipes to emulate SNARP's original default behavior::
 
     $ arecord -D hw:0,0 -r 8000 |\
-          python snarp.py --silence-min 120 --silence-max 135 output.wav
+          python snarp.py output.wav
 
 And SNARP's original "podcaster" behavior::
 
     $ arecord -D front:CARD=Podcaster,DEV=0 -r 48000 -f S24_3LE |\
-          python snarp.py --silence-min -1500000 --silence-max 1500000 output.wav
+          python snarp.py output.wav
 
 .. _Sox: http://sox.sourceforge.net/
 .. _arecord: http://linux.die.net/man/1/arecord
