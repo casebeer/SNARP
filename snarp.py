@@ -20,6 +20,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# context manager support for Python 2.5
+from __future__ import with_statement
+
 import logging
 #logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.INFO)
