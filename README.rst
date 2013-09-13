@@ -59,3 +59,13 @@ And SNARP's original "podcaster" behavior::
 .. _Sox: http://sox.sourceforge.net/
 .. _arecord: http://linux.die.net/man/1/arecord
 
+
+Limitations
+-----------
+
+- There's currently no suport for Python 2.5 and below
+- Python's ``wave`` module cannot read wave files with sample widths greater than 16 bits, 
+  so neither can we (this is because the Wave format says to use extended headers for wider 
+  samples, and the module doesn't read extended headers). 
+
+
